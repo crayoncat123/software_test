@@ -1,0 +1,19 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: paymentservice-network-delay
+  namespace: online-boutique
+spec:
+  action: delay          # 注入网络延迟
+  mode: one              # 只对 selector 选中的一个 Pod 注入
+  selector:
+    namespaces:
+      - online-boutique
+    labelSelectors:
+      "app": "paymentservice"   # 目标标签：app=paymentservice
+  delay:
+    latency: "500ms"     # 在目标 Pod 的流量上增加 500 ms 延迟
+    correlation: "100"   # 100% 的网络包都会被打上这 500 ms 延迟
+  duration: "60s"        # 故障持续 60 秒
+  scheduler:
+    cron: "@once"        # 立即执行一次（60s 后自动恢复）

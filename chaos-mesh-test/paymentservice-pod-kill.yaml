@@ -1,0 +1,15 @@
+# 文件名：paymentservice-pod-kill.yaml
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: paymentservice-pod-kill
+  namespace: online-boutique
+spec:
+  action: pod-kill               # 故障类型：杀掉 Pod（随机选）
+  mode: one                      # 只在 selector 选中的一个 Pod 上生效
+  selector:
+    namespaces:
+      - online-boutique
+    labelSelectors:
+      "app": "paymentservice"    # 目标服务的 Pod 标签：app=paymentservice
+  duration: "30s"                # 杀掉后持续 30 秒（这段期间 Chaos Mesh 会持续随机杀 Pod，直到 30s 结束为止）

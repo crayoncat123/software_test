@@ -1,0 +1,16 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: currencyservice-cpu-stress
+  namespace: online-boutique
+spec:
+  mode: one              # 只对 selector 选中的一个 Pod 注入
+  selector:
+    namespaces:
+      - online-boutique
+    labelSelectors:
+      "app": "currencyservice"  # 目标标签：app=currencyservice
+  stressors:
+    cpu:
+      workers: 2          # 使用 2 个 worker 线程模拟 100% CPU 占用
+  duration: "30s"        # 持续 30 秒
